@@ -6,6 +6,7 @@ import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler';
 import vertex from './shaders/vertexShader.glsl';
 import fragment from './shaders/fragmentShader.glsl';
 
+
 class Model {
     constructor(obj) {
         console.log(obj)

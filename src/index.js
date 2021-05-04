@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import Model from './model.js';
 import vertex from './shaders/vertexShader.glsl';
 import fragment from './shaders/fragmentShader.glsl';
-
+import modelsData from './modelsData.js';
 // const myObjs = [
 //   { name: "super" },
 //   { name: "anothersuper" },
@@ -56,15 +56,26 @@ Mesh
 /*------------------------------
 Models
 ------------------------------*/
-const uruz = new Model({
-    name: 'uruz',
-    color1: 'red',
-    color2: 'yellow',
-    background: '#47001b',
-    file: './models/uruz.glb',
-    scene: scene,
-    placeOnLoad: true,
-});
+// const uruz = new Model({
+//     name: 'uruz',
+//     color1: 'red',
+//     color2: 'yellow',
+//     background: '#47001b',
+//     file: './models/uruz.glb',
+//     scene: scene,
+//     placeOnLoad: true,
+// });
+
+const myObjs = modelsData;
+
+for (const o in myObjs) {
+    myObjs[o].scene = scene
+    myObjs[o] = new Model(myObjs[o]);
+}
+
+//myObjs[1].add();
+
+console.log(myObjs);
 
 /*------------------------------
 OrbitControls
