@@ -46,8 +46,7 @@ let currActiveModel = 0;
 OrbitControls
 ------------------------------*/
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enabled = true;
-
+controls.enabled = false;
 
 /*------------------------------
 Helpers 
@@ -88,8 +87,44 @@ window.addEventListener('resize', onWindowResize, false);
 /*------------------------------
 Controller
 ------------------------------*/
+// BUTTONS
 const buttons = document.querySelectorAll('.button')
 buttons[0].addEventListener('click', () => {
+    nextModel()
+})
+buttons[1].addEventListener('click', () => {
+    previousModel()
+})
+
+
+// SCROLL
+let isScrolling;
+let body = document.querySelector('body');
+
+window.addEventListener('wheel', function (event) {
+    // Clear our timeout throughout the scroll
+    window.clearTimeout(isScrolling);
+    // Set a timeout to run after scrolling ends
+    isScrolling = setTimeout(function () {
+        // Run the callback
+        console.log('Scrolling has stopped.');
+
+        if (event.deltaY > 1 && !animationIsRunning()) {
+            nextModel()
+        } else if (event.deltaY < 1 && !animationIsRunning()) {
+            previousModel()
+        }
+    }, 66);
+
+}, false);
+
+
+// FUNCTIONS
+function animationIsRunning() {
+    return body.classList.contains('active')
+}
+
+function nextModel() {
     if (currActiveModel === myObjs.length - 1) {
         myObjs[currActiveModel].remove()
         currActiveModel = 0
@@ -99,8 +134,9 @@ buttons[0].addEventListener('click', () => {
         currActiveModel += 1
         myObjs[currActiveModel].add()
     }
-})
-buttons[1].addEventListener('click', () => {
+}
+
+function previousModel() {
     if (currActiveModel === 0) {
         myObjs[currActiveModel].remove()
         currActiveModel = myObjs.length - 1
@@ -110,4 +146,4 @@ buttons[1].addEventListener('click', () => {
         currActiveModel -= 1
         myObjs[currActiveModel].add()
     }
-})
+}
