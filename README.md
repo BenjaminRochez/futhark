@@ -1,16 +1,12 @@
 # futhark
-<a href="https://gitmoji.dev">
-  <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji">
-</a>
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
+
 *A personal project of a creative website showcasing the old futhark runes for linguistic purposes.*
 ---
 ## Requirements
 Make sure you have [Node.js](https://nodejs.org/it/) installed on your machine.
 - Required minimum Node version: at least 10
 - Required minimum NPM version: at least 6
-
-Download and install [Blender](https://www.blender.org/)
-- Required minimum Blender versione: 2.91.2
 
 ---
 ## Install & Run
