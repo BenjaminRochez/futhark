@@ -45,13 +45,26 @@ camera.position.y = 1;
 /*------------------------------
 Mesh
 ------------------------------*/
-const geometry = new THREE.BoxGeometry(2, 2, 2);
-const material = new THREE.ShaderMaterial({
-  vertexShader: vertex,
-  fragmentShader: fragment
+// const geometry = new THREE.BoxGeometry(2, 2, 2);
+// const material = new THREE.ShaderMaterial({
+//   vertexShader: vertex,
+//   fragmentShader: fragment
+// });
+// const cube = new THREE.Mesh(geometry, material);
+// scene.add( cube );
+
+/*------------------------------
+Models
+------------------------------*/
+const uruz = new Model({
+    name: 'uruz',
+    color1: 'red',
+    color2: 'yellow',
+    background: '#47001b',
+    file: './models/uruz.glb',
+    scene: scene,
+    placeOnLoad: true,
 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add( cube );
 
 /*------------------------------
 OrbitControls
@@ -83,7 +96,7 @@ const animate = function () {
 };
 animate();
 
-/*------------------------------s
+/*------------------------------
 Resize
 ------------------------------*/
 function onWindowResize() {
