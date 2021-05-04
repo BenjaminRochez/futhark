@@ -69,7 +69,7 @@ Loop
 const animate = function () {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    if(myObjs[currActiveModel].particlesMaterial){
+    if (myObjs[currActiveModel].particlesMaterial) {
         myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
     }
 };
@@ -90,12 +90,24 @@ Controller
 ------------------------------*/
 const buttons = document.querySelectorAll('.button')
 buttons[0].addEventListener('click', () => {
-    myObjs[currActiveModel].remove()
-    currActiveModel += 1
-    myObjs[currActiveModel].add()
+    if (currActiveModel === myObjs.length - 1) {
+        myObjs[currActiveModel].remove()
+        currActiveModel = 0
+        myObjs[currActiveModel].add()
+    } else {
+        myObjs[currActiveModel].remove()
+        currActiveModel += 1
+        myObjs[currActiveModel].add()
+    }
 })
 buttons[1].addEventListener('click', () => {
-    myObjs[currActiveModel].remove()
-    currActiveModel -= 1
-    myObjs[currActiveModel].add()
+    if (currActiveModel === 0) {
+        myObjs[currActiveModel].remove()
+        currActiveModel = myObjs.length - 1
+        myObjs[currActiveModel].add()
+    } else {
+        myObjs[currActiveModel].remove()
+        currActiveModel -= 1
+        myObjs[currActiveModel].add()
+    }
 })

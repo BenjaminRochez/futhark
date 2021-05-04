@@ -20,5 +20,26 @@ export default [
         color2: 'pink',
         background: '#110047',
         file: './models/thorn.glb',
+    },
+    {
+        name: 'ansuz',
+        color1: 'blue',
+        color2: 'pink',
+        background: '#110047',
+        file: './models/ansuz.glb',
+    },
+    {
+        name: 'raidho',
+        color1: 'blue',
+        color2: 'pink',
+        background: '#110047',
+        file: './models/raidho.glb',
+    },
+    {
+        name: 'kenaz',
+        color1: 'blue',
+        color2: 'pink',
+        background: '#110047',
+        file: './models/kenaz.glb',
     }
 ];
