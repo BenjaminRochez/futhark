@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import Model from './model.js';
+import vertex from './shaders/vertexShader.glsl';
+import fragment from './shaders/fragmentShader.glsl';
 
 // const myObjs = [
 //   { name: "super" },
@@ -44,8 +46,9 @@ camera.position.y = 1;
 Mesh
 ------------------------------*/
 const geometry = new THREE.BoxGeometry(2, 2, 2);
-const material = new THREE.MeshBasicMaterial({
-  color: 0x00ff00,
+const material = new THREE.ShaderMaterial({
+  vertexShader: vertex,
+  fragmentShader: fragment
 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add( cube );
