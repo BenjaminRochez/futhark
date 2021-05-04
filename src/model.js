@@ -14,6 +14,10 @@ class Model {
         this.file = obj.file
         this.scene = obj.scene
         this.placeOnLoad = obj.placeOnLoad
+        this.color1 = obj.color1
+        this.color2 = obj.color2
+        this.background = obj.background
+        this.isActive = false;
 
         this.loader = new GLTFLoader()
         this.dracoLoader = new DRACOLoader()
@@ -35,21 +39,120 @@ class Model {
             /*------------------------------
             Original Geometry
             ------------------------------*/
-            this.material = new THREE.MeshBasicMaterial({
-                color: 'green',
-                wireframe: true
-            })
-            this.mesh.material = this.material
             this.geometry = this.mesh.geometry
+
+            /*------------------------------
+            Particles material
+            ------------------------------*/
+            this.particlesMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    uColor1: { value: new THREE.Color(this.color1) },
+                    uColor2: { value: new THREE.Color(this.color2) },
+                    uTime: { value: 0 },
+                    uScale: { value: 1 },
+                },
+                vertexShader: vertex,
+                fragmentShader: fragment,
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            })
+            /*------------------------------
+            Particles geometry 
+            - Basically, we create particles along the vertices
+            ------------------------------*/
+            const numParticles = 15000
+
+            const sampler = new MeshSurfaceSampler(this.mesh).build()
             
-            let cube = new THREE.Mesh(this.geometry, this.material)
-            this.scene.add(cube)
+            this.particlesGeometry = new THREE.BufferGeometry()
+            const particlesPosition = new Float32Array(numParticles * 3)
+            const particlesRandomness = new Float32Array(numParticles * 3)
+
+            for (let i = 0; i < numParticles; i++) {
+                const newPosition = new THREE.Vector3()
+                sampler.sample(newPosition)
+                particlesPosition.set([
+                    newPosition.x,
+                    newPosition.y,
+                    newPosition.z,
+                ], i * 3)
+
+                particlesRandomness.set([
+                    // Number from -1 to 1
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1
+                ], i * 3)
+            }
+
+            this.particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPosition, 3))
+            this.particlesGeometry.setAttribute('aRandom', new THREE.BufferAttribute(particlesRandomness, 3))
+            
+
+            // Init this.particles
+            this.particles = new THREE.Points(this.particlesGeometry, this.particlesMaterial)
+            
+            if (this.placeOnLoad) {
+                this.add()
+            }
         })
-        
     }
 
     add() {
-        console.log("Added: " + this.name);
+        this.scene.add(this.particles)
+
+
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 1,
+            duration: this.duration,
+            delay: .3,
+            ease: 'power3.out'
+        })
+
+        if (!this.isActive) {
+            gsap.fromTo(this.particles.rotation, {
+                y: Math.PI * 2,
+                x: Math.PI * 2
+            }, {
+                y: 0,
+                x: 0,
+                duration: this.duration,
+                ease: 'power3.out'
+            })
+            this.isActive = true
+
+            // Update background color
+            gsap.to('body', {
+                background: this.background,
+                duration: this.duration,
+                ease: 'power3.in',
+                className: 'active',
+                onComplete: () =>{
+                    document.querySelector('body').classList.remove('active')
+                }
+            })
+        }
+    }
+
+    remove() {
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 0,
+            duration: this.duration,
+            ease: 'power3.out',
+            onComplete: () => {
+                this.scene.remove(this.particles)
+                this.isActive = false
+            }
+        })
+        
+
+        gsap.to(this.particles.rotation, {
+            y: Math.PI * 2,
+            duration: this.duration,
+            ease: 'power3.out'
+        })
     }
 }
 

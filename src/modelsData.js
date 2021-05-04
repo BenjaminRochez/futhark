@@ -6,7 +6,6 @@ export default [
         background: '#47001b',
         file: './models/uruz.glb',
         placeOnLoad: true,
-        positionMoved: 0
     },
     {
         name: 'fehu',
@@ -14,7 +13,12 @@ export default [
         color2: 'pink',
         background: '#110047',
         file: './models/fehu.glb',
-        positionMoved: 1
+    },
+    {
+        name: 'thorn',
+        color1: 'blue',
+        color2: 'pink',
+        background: '#110047',
+        file: './models/thorn.glb',
     }
-  ];
-  
+];

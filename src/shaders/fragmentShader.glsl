@@ -1,11 +1,24 @@
-uniform float time;
-uniform float progress;
-uniform sampler2D texture1;
-uniform vec4 resolution;
-varying vec2 vUv;
+uniform float uScale;
+
+uniform float uTime;
+
+// GET POSITION
 varying vec3 vPosition;
-float PI = 3.141592653589793238;
-void main()	{
-	// vec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);
-	gl_FragColor = vec4(vUv,0.0,1.);
-}
+// PASS COLOR
+uniform vec3 uColor1;
+uniform vec3 uColor2;
+void main() {
+    vec3 color = vec3(1.0, 1.0, 1.0);
+
+    vec3 color1 = vec3(1.0, 0.0, 0.0);
+    vec3 color2 = vec3(1.0, 1.0, 0.0);
+    color = vPosition;
+
+    // FOG
+    float depth = vPosition.z * 0.5 + 0.5;
+
+    color = mix(uColor1, uColor2, vPosition.z * 0.5 + 0.5);
+    // DEPTH
+    //gl_FragColor = vec4(color, uScale);
+    gl_FragColor = vec4(color, (depth * 0.3 + 0.2) * uScale * 2.);
+} 
