@@ -40,6 +40,7 @@ for (const o in myObjs) {
     myObjs[o].scene = scene
     myObjs[o] = new Model(myObjs[o]);
 }
+let currActiveModel = 0;
 
 /*------------------------------
 OrbitControls
@@ -68,6 +69,9 @@ Loop
 const animate = function () {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+    if(myObjs[currActiveModel].particlesMaterial){
+        myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    }
 };
 animate();
 
@@ -80,3 +84,18 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener('resize', onWindowResize, false);
+
+/*------------------------------
+Controller
+------------------------------*/
+const buttons = document.querySelectorAll('.button')
+buttons[0].addEventListener('click', () => {
+    myObjs[currActiveModel].remove()
+    currActiveModel += 1
+    myObjs[currActiveModel].add()
+})
+buttons[1].addEventListener('click', () => {
+    myObjs[currActiveModel].remove()
+    currActiveModel -= 1
+    myObjs[currActiveModel].add()
+})

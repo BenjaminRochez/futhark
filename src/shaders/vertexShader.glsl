@@ -13,8 +13,6 @@ uniform float uTime;
 // Pass scale
 uniform float uScale;
 
-// Pass position moved
-uniform float uPositionMoved;
 
 void main() {
     vPosition = position;
@@ -36,7 +34,6 @@ void main() {
     pos.y += cos(time * aRandom.y) * 0.01;
     pos.z += cos(time * aRandom.z) * 0.01;
 
-    //pos.y += uPositionMoved;
 
     vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
     gl_Position = projectionMatrix * mvPosition;

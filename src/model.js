@@ -17,7 +17,8 @@ class Model {
         this.color1 = obj.color1
         this.color2 = obj.color2
         this.background = obj.background
-        this.isActive = false;
+        this.duration = 1
+        this.isActive = false
 
         this.loader = new GLTFLoader()
         this.dracoLoader = new DRACOLoader()
@@ -49,7 +50,7 @@ class Model {
                     uColor1: { value: new THREE.Color(this.color1) },
                     uColor2: { value: new THREE.Color(this.color2) },
                     uTime: { value: 0 },
-                    uScale: { value: 1 },
+                    uScale: { value: 0 },
                 },
                 vertexShader: vertex,
                 fragmentShader: fragment,
@@ -146,7 +147,7 @@ class Model {
                 this.isActive = false
             }
         })
-        
+         
 
         gsap.to(this.particles.rotation, {
             y: Math.PI * 2,
