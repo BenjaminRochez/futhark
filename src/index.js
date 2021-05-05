@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import Model from './model.js';
-import vertex from './shaders/vertexShader.glsl';
-import fragment from './shaders/fragmentShader.glsl';
+import starsVertex from './shaders/stars/vertexShader.glsl';
+import starsFragment from './shaders/stars/fragmentShader.glsl';
 import modelsData from './modelsData.js';
 import Stats from 'stats.js';
 import * as dat from 'dat.gui'
@@ -17,6 +17,8 @@ const renderer = new THREE.WebGLRenderer({
     alpha: true
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
 document.body.appendChild(renderer.domElement);
 
 
@@ -65,29 +67,7 @@ scene.add(axesHelper);
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
-/*------------------------------
-Clock
-------------------------------*/
-const clock = new THREE.Clock();
 
-/*------------------------------
-Loop
-------------------------------*/
-
-const animate = function () {
-    stats.begin();
-    stats.end();
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    if (myObjs[currActiveModel].particlesMaterial && !allModelsActive) {
-        myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
-    }else if(allModelsActive){
-        myObjs.forEach(obj =>{
-            obj.particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
-        })
-    }
-};
-animate();
 
 /*------------------------------
 Resize
@@ -96,6 +76,8 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    stars.uniform.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
 }
 window.addEventListener('resize', onWindowResize, false);
 
@@ -141,10 +123,9 @@ window.addEventListener('wheel', function (event) {
     isScrolling = setTimeout(function () {
         // Run the callback
         console.log('Scrolling has stopped.');
-
-        if (event.deltaY > 1 && !animationIsRunning()) {
+        if (event.deltaY >= 1 && !animationIsRunning()) {
             nextModel()
-        } else if (event.deltaY < 1 && !animationIsRunning()) {
+        } else if (event.deltaY <= 1 && !animationIsRunning()) {
             previousModel()
         }
     }, 66);
@@ -192,23 +173,64 @@ function allModels(){
 Stars
 ------------------------------*/
 const starsGeometry = new THREE.BufferGeometry();
-const starsCount = 30;
+const starsCount = 200;
 const positionArray = new Float32Array(starsCount * 3);
+const scaleArray = new Float32Array(starsCount)
 
 for(let i = 0; i<starsCount; i++){
-    positionArray[i * 3 + 0] = Math.random() * 4
-    positionArray[i * 3 + 1] = Math.random() * 4
-    positionArray[i * 3 + 2] = Math.random() * 4
+    positionArray[i * 3 + 0] = (Math.random() * 4 - 2) * 2.5 
+    positionArray[i * 3 + 1] = (Math.random() * 4 - 2) * 2.5
+    positionArray[i * 3 + 2] = (Math.random() * 4 - 2) * 2.5
+    scaleArray[i] = Math.random()
 }
-
+starsGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1))
 starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
 
-const starsMaterial = new THREE.PointsMaterial({size: 0.1, sizeAttenuation: true});
+const starsMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+
+    uniforms:
+    {
+        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uSize: {value: 100},
+        uTime: { value: 0 },
+    },
+    vertexShader: starsVertex,
+    fragmentShader: starsFragment
+})
 
 const stars = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(stars)
 
+/*------------------------------
+Clock
+------------------------------*/
+const clock = new THREE.Clock();
 
+/*------------------------------
+Loop
+------------------------------*/
+
+const animate = function () {
+    const elapsedTime = clock.getElapsedTime()
+
+    stats.begin();
+    stats.end();
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+    starsMaterial.uniforms.uTime.value = elapsedTime;
+
+    if (myObjs[currActiveModel].particlesMaterial && !allModelsActive) {
+        myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = elapsedTime;
+    }else if(allModelsActive){
+        myObjs.forEach(obj =>{
+            obj.particlesMaterial.uniforms.uTime.value = elapsedTime;
+        })
+    }
+};
+animate();
 
 /*------------------------------
 GUI
@@ -217,4 +239,4 @@ const gui = new dat.GUI()
 gui.add(gridHelper, 'visible').name('Grid Helper');
 gui.add(axesHelper, 'visible').name('Axes Helper');
 gui.add(controls, 'enabled').name('Orbit control');
-
+gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('starsSize')

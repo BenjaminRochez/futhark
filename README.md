@@ -26,3 +26,6 @@ that will open a new window on your browser http://localhost:8080/
 
 ### Ressources:
 https://codesandbox.io/s/falling-dawn-cj0bb?file=/src/index.js
+
+### Todo & ideas
+[ ] Add a scroll feedback to the user (maybe stars going up or down ?)
