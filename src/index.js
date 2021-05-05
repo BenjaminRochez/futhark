@@ -5,6 +5,9 @@ import Model from './model.js';
 import vertex from './shaders/vertexShader.glsl';
 import fragment from './shaders/fragmentShader.glsl';
 import modelsData from './modelsData.js';
+import Stats from 'stats.js';
+import * as dat from 'dat.gui'
+
 
 /*------------------------------
 Renderer
@@ -41,12 +44,15 @@ for (const o in myObjs) {
     myObjs[o] = new Model(myObjs[o]);
 }
 let currActiveModel = 0;
+let allModelsActive = false;
 
 /*------------------------------
 OrbitControls
 ------------------------------*/
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enabled = false;
+console.log(controls)
+
 
 /*------------------------------
 Helpers 
@@ -56,6 +62,9 @@ scene.add(gridHelper);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
+var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 /*------------------------------
 Clock
 ------------------------------*/
@@ -66,10 +75,16 @@ Loop
 ------------------------------*/
 
 const animate = function () {
+    stats.begin();
+    stats.end();
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    if (myObjs[currActiveModel].particlesMaterial) {
+    if (myObjs[currActiveModel].particlesMaterial && !allModelsActive) {
         myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    }else if(allModelsActive){
+        myObjs.forEach(obj =>{
+            obj.particlesMaterial.uniforms.uTime.value = clock.getElapsedTime();
+        })
     }
 };
 animate();
@@ -85,6 +100,20 @@ function onWindowResize() {
 window.addEventListener('resize', onWindowResize, false);
 
 /*------------------------------
+MouseMove
+------------------------------*/
+function onMouseMove(e) {
+    const x = e.clientX
+    const y = e.clientY
+
+    gsap.to(scene.rotation, {
+        y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
+        x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+    })
+}
+window.addEventListener('mousemove', onMouseMove)
+
+/*------------------------------
 Controller
 ------------------------------*/
 // BUTTONS
@@ -94,6 +123,10 @@ buttons[0].addEventListener('click', () => {
 })
 buttons[1].addEventListener('click', () => {
     previousModel()
+})
+
+buttons[2].addEventListener('click', () => {
+    allModels()
 })
 
 
@@ -147,3 +180,41 @@ function previousModel() {
         myObjs[currActiveModel].add()
     }
 }
+
+function allModels(){
+    allModelsActive = true;
+    myObjs.forEach(obj =>{
+        obj.add()
+    });
+}
+
+/*------------------------------
+Stars
+------------------------------*/
+const starsGeometry = new THREE.BufferGeometry();
+const starsCount = 30;
+const positionArray = new Float32Array(starsCount * 3);
+
+for(let i = 0; i<starsCount; i++){
+    positionArray[i * 3 + 0] = Math.random() * 4
+    positionArray[i * 3 + 1] = Math.random() * 4
+    positionArray[i * 3 + 2] = Math.random() * 4
+}
+
+starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
+
+const starsMaterial = new THREE.PointsMaterial({size: 0.1, sizeAttenuation: true});
+
+const stars = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(stars)
+
+
+
+/*------------------------------
+GUI
+------------------------------*/
+const gui = new dat.GUI()
+gui.add(gridHelper, 'visible').name('Grid Helper');
+gui.add(axesHelper, 'visible').name('Axes Helper');
+gui.add(controls, 'enabled').name('Orbit control');
+
