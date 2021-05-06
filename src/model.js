@@ -9,7 +9,7 @@ import fragment from './shaders/fragmentShader.glsl';
 
 class Model {
     constructor(obj) {
-        console.log(obj)
+        //console.log(obj)
         this.name = obj.name
         this.file = obj.file
         this.scene = obj.scene
@@ -30,7 +30,7 @@ class Model {
 
     init() {
         this.loader.load(this.file, (response) => {
-            console.log("Init: " + this.name);
+            //console.log("Init: " + this.name);
 
             /*------------------------------
             Original mesh

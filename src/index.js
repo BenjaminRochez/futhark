@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import Model from './model.js';
+import Title from './title.js';
 import starsVertex from './shaders/stars/vertexShader.glsl';
 import starsFragment from './shaders/stars/fragmentShader.glsl';
 import modelsData from './modelsData.js';
@@ -9,11 +10,9 @@ import Stats from 'stats.js';
 import * as dat from 'dat.gui'
 
 
-
 /*------------------------------
 Loading Manager
 ------------------------------*/
-
 
 const loadingManager = new THREE.LoadingManager();
 
@@ -23,7 +22,7 @@ loadingManager.onStart = () =>
 }
 loadingManager.onLoad = () =>
 {
-    console.log('loading finished')
+    //console.log('loading finished')
     scene.add(stars)
     gsap.fromTo(_backgroundIntro.scale, {
         y: 1,
@@ -34,6 +33,10 @@ loadingManager.onLoad = () =>
         duration: 3,
         ease: 'power3.out'
     })
+    
+    for(const title in myTitles){
+        myTitles[title] = new Title(myTitles[title]);
+    }
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) =>
 {
@@ -49,7 +52,17 @@ const textureLoader = new THREE.TextureLoader(loadingManager);
 const backgroundTexture =  textureLoader.load( './img/bg3d_sub.jpg' )
 const _bgIntroMap = textureLoader.load("./img/bg3d_intro.png");
 
-const thurizas = textureLoader.load("./img/titles/uruz.png");
+/*------------------------------
+Titles
+------------------------------*/
+let myTitles = [];
+modelsData.forEach(i =>{
+    myTitles.push(i);
+})
+for(const t in myTitles){
+    myTitles[t].texture = textureLoader.load(myTitles[t].img);
+    myTitles[t].scene = scene;
+}
 
 /*------------------------------
 Renderer
@@ -98,7 +111,6 @@ OrbitControls
 ------------------------------*/
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enabled = false;
-console.log(controls)
 
 
 /*------------------------------
@@ -200,24 +212,33 @@ function animationIsRunning() {
 function nextModel() {
     if (currActiveModel === myObjs.length - 1) {
         myObjs[currActiveModel].remove()
+        myTitles[currActiveModel].remove()
         currActiveModel = 0
         myObjs[currActiveModel].add()
+        myTitles[currActiveModel].add()
     } else {
         myObjs[currActiveModel].remove()
+        console.log(myTitles[currActiveModel])
+        myTitles[currActiveModel].remove()
         currActiveModel += 1
         myObjs[currActiveModel].add()
+        myTitles[currActiveModel].add()
     }
 }
 
 function previousModel() {
     if (currActiveModel === 0) {
         myObjs[currActiveModel].remove()
+        myTitles[currActiveModel].remove()
         currActiveModel = myObjs.length - 1
         myObjs[currActiveModel].add()
+        myTitles[currActiveModel].add()
     } else {
         myObjs[currActiveModel].remove()
+        myTitles[currActiveModel].remove()
         currActiveModel -= 1
         myObjs[currActiveModel].add()
+        myTitles[currActiveModel].add()
     }
 }
 
@@ -274,16 +295,7 @@ _backgroundIntro.scale.x = 1., _backgroundIntro.scale.y = 1.;
 _backgroundIntro.position.z = 1;
 scene.add(_backgroundIntro);
 
-/*------------------------------
-Titles
-------------------------------*/
 
-let res = 221 / 46 * .3;
-const geometry = new THREE.PlaneGeometry( res, 0.3, 1);
-const material = new THREE.MeshBasicMaterial( {transparent: true, map:thurizas, side:THREE.FrontSide, depthTest:false, fog:false} );
-const plane = new THREE.Mesh( geometry, material );
-plane.position.y -= 1.5;
-scene.add( plane );
 
 /*------------------------------
 Clock

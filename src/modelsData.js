@@ -6,6 +6,7 @@ export default [
         background: '#000',
         file: './models/uruz.glb',
         placeOnLoad: true,
+        img: './img/titles/uruz.png'
     },
     {
         name: 'fehu',
@@ -13,13 +14,15 @@ export default [
         color2: 'white',
         background: '#000',
         file: './models/fehu.glb',
+        img: './img/titles/fehu.png'
     },
     {
-        name: 'thorn',
+        name: 'thurisaz',
         color1: 'white',
         color2: 'white',
         background: '#000',
         file: './models/thorn.glb',
+        img: './img/titles/thurisaz.png'
     },
     {
         name: 'ansuz',
@@ -27,19 +30,22 @@ export default [
         color2: 'white',
         background: '#000',
         file: './models/ansuz.glb',
+        img: './img/titles/ansuz.png'
     },
     {
-        name: 'raidho',
+        name: 'raido',
         color1: 'white',
         color2: 'white',
         background: '#000',
         file: './models/raidho.glb',
+        img: './img/titles/raido.png'
     },
     {
-        name: 'kenaz',
+        name: 'kaunan',
         color1: 'white',
         color2: 'white',
         background: '#000',
         file: './models/kenaz.glb',
+        img: './img/titles/kaunan.png'
     }
 ];
