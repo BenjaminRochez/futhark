@@ -8,9 +8,45 @@ import modelsData from './modelsData.js';
 import Stats from 'stats.js';
 import * as dat from 'dat.gui'
 
-var loader = new THREE.TextureLoader();
-var backgroundTexture = loader.load( './img/bg3d_sub.jpg' );
-var _bgIntroMap = loader.load("./img/bg3d_intro.png");
+
+
+
+
+
+const loadingManager = new THREE.LoadingManager();
+
+loadingManager.onStart = () =>
+{
+    console.log('loading started')
+}
+loadingManager.onLoad = () =>
+{
+    console.log('loading finished')
+    scene.add(stars)
+    gsap.fromTo(_backgroundIntro.scale, {
+        y: 1,
+        x: 1
+    }, {
+        y: 3,
+        x: 3,
+        duration: 3,
+        ease: 'power3.out'
+    })
+}
+loadingManager.onProgress = (url, itemsLoaded, itemsTotal) =>
+{
+    console.log('loading progressing ',(itemsLoaded / itemsTotal * 100) + '%');
+}
+loadingManager.onError = () =>
+{
+    console.log('loading error')
+}
+
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const backgroundTexture =  textureLoader.load( './img/bg3d_sub.jpg' )
+const _bgIntroMap = textureLoader.load("./img/bg3d_intro.png");
+
 /*------------------------------
 Renderer
 ------------------------------*/
@@ -209,7 +245,7 @@ const starsMaterial = new THREE.ShaderMaterial({
 })
 
 const stars = new THREE.Points(starsGeometry, starsMaterial);
-scene.add(stars)
+
 
 
 /*------------------------------
@@ -259,16 +295,3 @@ gui.add(axesHelper, 'visible').name('Axes Helper');
 gui.add(controls, 'enabled').name('Orbit control');
 gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('starsSize')
 
-THREE.DefaultLoadingManager.onLoad = function ( ) {
-    console.log(_backgroundIntro.scale.x);
-	
-    gsap.fromTo(_backgroundIntro.scale, {
-        y: 1,
-        x: 1
-    }, {
-        y: 3,
-        x: 3,
-        duration: 3,
-        ease: 'power3.out'
-    })
-};

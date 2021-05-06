@@ -51,6 +51,7 @@ class Model {
                     uColor2: { value: new THREE.Color(this.color2) },
                     uTime: { value: 0 },
                     uScale: { value: 0 },
+                    uPixelRatio: { value: Math.min(window.devicePixelRatio, 2)},
                 },
                 vertexShader: vertex,
                 fragmentShader: fragment,

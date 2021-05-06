@@ -13,6 +13,7 @@ uniform float uTime;
 // Pass scale
 uniform float uScale;
 
+uniform float uPixelRatio;
 
 void main() {
     vPosition = position;
@@ -37,5 +38,5 @@ void main() {
 
     vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
     gl_Position = projectionMatrix * mvPosition;
-    gl_PointSize = 8.0 / -mvPosition.z;    
+    gl_PointSize = (5.0 / -mvPosition.z) * uPixelRatio;    
 }
