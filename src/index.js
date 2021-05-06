@@ -13,7 +13,7 @@ import * as dat from 'dat.gui'
 /*------------------------------
 Loading Manager
 ------------------------------*/
-
+let loaded = false;
 const loadingManager = new THREE.LoadingManager();
 
 loadingManager.onStart = () => {
@@ -35,6 +35,8 @@ loadingManager.onLoad = () => {
     for (const title in myTitles) {
         myTitles[title] = new Title(myTitles[title]);
     }
+    loaded = true;
+    animate();
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
     console.log('loading progressing ', (itemsLoaded / itemsTotal * 100) + '%');
@@ -112,12 +114,12 @@ controls.enabled = false;
 /*------------------------------
 Helpers 
 ------------------------------*/
-const gridHelper = new THREE.GridHelper(10, 10);
-scene.add(gridHelper);
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
-gridHelper.visible = false;
-axesHelper.visible = false;
+// const gridHelper = new THREE.GridHelper(10, 10);
+// scene.add(gridHelper);
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
+// gridHelper.visible = false;
+// axesHelper.visible = false;
 
 var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -148,7 +150,7 @@ window.addEventListener('resize', onWindowResize, false);
 MouseMove
 ------------------------------*/
 let mouse = new THREE.Vector2();
-
+const raycaster = new THREE.Raycaster();
 function onMouseMove(e) {
     const x = e.clientX
     const y = e.clientY
@@ -200,7 +202,7 @@ window.addEventListener('wheel', function (event) {
         previousModel()
         removeCta()
     }
-    
+
     scrollActivated = true;
     // Clear our timeout throughout the scroll
     window.clearTimeout(isScrolling);
@@ -214,7 +216,7 @@ window.addEventListener('wheel', function (event) {
 
 }, false);
 
-function removeCta(){
+function removeCta() {
     if (!hasScrolled) {
         gsap.to(cta, {
             opacity: 0,
@@ -226,6 +228,13 @@ function removeCta(){
         })
     }
 }
+
+window.addEventListener('click', () =>{
+    if(currentIntersect){
+        console.log(currentIntersect.object.name);
+        // to the router here 
+    }
+});
 
 // FUNCTIONS
 function animationIsRunning() {
@@ -327,12 +336,32 @@ const clock = new THREE.Clock();
 /*------------------------------
 Loop
 ------------------------------*/
-
+let currentIntersect = null;
 const animate = function () {
     const elapsedTime = clock.getElapsedTime()
 
     stats.begin();
     stats.end();
+
+    raycaster.setFromCamera(mouse, camera)
+
+    if (myObjs[currActiveModel].particles) {
+        
+        const objectsToTest = [myObjs[currActiveModel].mesh, myTitles[currActiveModel].plane];
+        const intersects = raycaster.intersectObjects(objectsToTest)
+        if (intersects.length) {
+            if (currentIntersect === null) {
+                currentIntersect = intersects[0];
+                body.style.cursor = "pointer";
+            }
+        } else {
+            if (currentIntersect) {
+                currentIntersect = null;
+                body.style.cursor = "initial";
+            }
+        }
+    }
+
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
     starsMaterial.uniforms.uTime.value = elapsedTime;
@@ -345,14 +374,15 @@ const animate = function () {
         })
     }
 };
-animate();
+
 
 /*------------------------------
 GUI
 ------------------------------*/
 const gui = new dat.GUI()
-gui.add(gridHelper, 'visible').name('Grid Helper');
-gui.add(axesHelper, 'visible').name('Axes Helper');
+// gui.add(gridHelper, 'visible').name('Grid Helper');
+// gui.add(axesHelper, 'visible').name('Axes Helper');
 gui.add(controls, 'enabled').name('Orbit control');
+gui.close();
 gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('starsSize')
 

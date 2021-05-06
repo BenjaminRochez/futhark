@@ -5,7 +5,7 @@ import gsap from 'gsap';
 
 class Title {
     constructor(object) {
-        console.log(object);
+        //console.log(object);
         this.name = object.name;
         this.res = 221 / 46 * .3;
         this.scene = object.scene
@@ -21,9 +21,7 @@ class Title {
     }
 
     init() {
-        console.log('Init img: ' + this.name);
-
-
+        //console.log('Init img: ' + this.name);
         const geometry = new THREE.PlaneBufferGeometry(this.res, 0.3, 1);
         this.material = new THREE.ShaderMaterial({
             extensions: {
@@ -44,7 +42,7 @@ class Title {
         let material = this.material.clone();
         material.uniforms.uImage.value = this.texture;
         this.plane = new THREE.Mesh(geometry, material);
-        console.log(this.plane)
+        this.plane.name = this.name;
         this.plane.position.y -= 1.;
     }
 
