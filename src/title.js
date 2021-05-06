@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import vertex from './shaders/titles/vertexShader.glsl';
+import fragment from './shaders/titles/fragmentShader.glsl';
 import gsap from 'gsap';
 
 class Title {
@@ -22,14 +24,24 @@ class Title {
         console.log('Init img: ' + this.name);
 
 
-        const geometry = new THREE.PlaneGeometry(this.res, 0.3, 1);
-        const material = new THREE.MeshBasicMaterial({ 
-            transparent: true, 
-            map: this.texture, 
-            side: THREE.FrontSide, 
-            depthTest: false, 
-            fog: false
+        const geometry = new THREE.PlaneBufferGeometry(this.res, 0.3, 1);
+        this.material = new THREE.ShaderMaterial({
+            extensions: {
+                derivatives: "#extension GL_OES_standard_derivatives : enable"
+            },
+            uniforms: {
+                uImage: { value: 0 }
+            },
+            side: THREE.DoubleSide,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            transparent: true
         });
+
+        this.texture.needsUpdate = true;
+        let material = this.material.clone();
+        material.uniforms.uImage.value = this.texture;
+        console.log(material)
         this.plane = new THREE.Mesh(geometry, material);
         this.plane.position.y -= 1.5;
     }

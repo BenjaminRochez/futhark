@@ -218,7 +218,6 @@ function nextModel() {
         myTitles[currActiveModel].add()
     } else {
         myObjs[currActiveModel].remove()
-        console.log(myTitles[currActiveModel])
         myTitles[currActiveModel].remove()
         currActiveModel += 1
         myObjs[currActiveModel].add()
