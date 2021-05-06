@@ -10,7 +10,9 @@ import * as dat from 'dat.gui'
 
 
 
-
+/*------------------------------
+Loading Manager
+------------------------------*/
 
 
 const loadingManager = new THREE.LoadingManager();
@@ -46,6 +48,8 @@ loadingManager.onError = () =>
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const backgroundTexture =  textureLoader.load( './img/bg3d_sub.jpg' )
 const _bgIntroMap = textureLoader.load("./img/bg3d_intro.png");
+
+const thurizas = textureLoader.load("./img/titles/uruz.png");
 
 /*------------------------------
 Renderer
@@ -120,7 +124,15 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    stars.uniform.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+    starsMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+
+    
+    if (myObjs[currActiveModel]) {
+        
+        myObjs.forEach(obj =>{
+            obj.particlesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+        })
+    }
 }
 window.addEventListener('resize', onWindowResize, false);
 
@@ -157,20 +169,24 @@ buttons[2].addEventListener('click', () => {
 
 // SCROLL
 let isScrolling;
+let scrollActivated = false;
 let body = document.querySelector('body');
 
 window.addEventListener('wheel', function (event) {
+    if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated) {
+        nextModel()
+    } else if (event.deltaY <= 1 && !animationIsRunning() && !scrollActivated) {
+        previousModel()
+    }
+    scrollActivated = true;
     // Clear our timeout throughout the scroll
     window.clearTimeout(isScrolling);
     // Set a timeout to run after scrolling ends
     isScrolling = setTimeout(function () {
         // Run the callback
         console.log('Scrolling has stopped.');
-        if (event.deltaY >= 1 && !animationIsRunning()) {
-            nextModel()
-        } else if (event.deltaY <= 1 && !animationIsRunning()) {
-            previousModel()
-        }
+        
+        scrollActivated = false;
     }, 66);
 
 }, false);
@@ -257,6 +273,17 @@ var _backgroundIntro = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), _introBgMa
 _backgroundIntro.scale.x = 1., _backgroundIntro.scale.y = 1.;
 _backgroundIntro.position.z = 1;
 scene.add(_backgroundIntro);
+
+/*------------------------------
+Titles
+------------------------------*/
+
+let res = 221 / 46 * .3;
+const geometry = new THREE.PlaneGeometry( res, 0.3, 1);
+const material = new THREE.MeshBasicMaterial( {transparent: true, map:thurizas, side:THREE.FrontSide, depthTest:false, fog:false} );
+const plane = new THREE.Mesh( geometry, material );
+plane.position.y -= 1.5;
+scene.add( plane );
 
 /*------------------------------
 Clock
