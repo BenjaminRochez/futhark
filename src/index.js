@@ -16,12 +16,10 @@ Loading Manager
 
 const loadingManager = new THREE.LoadingManager();
 
-loadingManager.onStart = () =>
-{
+loadingManager.onStart = () => {
     console.log('loading started')
 }
-loadingManager.onLoad = () =>
-{
+loadingManager.onLoad = () => {
     //console.log('loading finished')
     scene.add(stars)
     gsap.fromTo(_backgroundIntro.scale, {
@@ -33,33 +31,31 @@ loadingManager.onLoad = () =>
         duration: 3,
         ease: 'power3.out'
     })
-    
-    for(const title in myTitles){
+
+    for (const title in myTitles) {
         myTitles[title] = new Title(myTitles[title]);
     }
 }
-loadingManager.onProgress = (url, itemsLoaded, itemsTotal) =>
-{
-    console.log('loading progressing ',(itemsLoaded / itemsTotal * 100) + '%');
+loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+    console.log('loading progressing ', (itemsLoaded / itemsTotal * 100) + '%');
 }
-loadingManager.onError = () =>
-{
+loadingManager.onError = () => {
     console.log('loading error')
 }
 
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
-const backgroundTexture =  textureLoader.load( './img/bg3d_sub.jpg' )
+const backgroundTexture = textureLoader.load('./img/bg3d_sub.jpg')
 const _bgIntroMap = textureLoader.load("./img/bg3d_intro.png");
 
 /*------------------------------
 Titles
 ------------------------------*/
 let myTitles = [];
-modelsData.forEach(i =>{
+modelsData.forEach(i => {
     myTitles.push(i);
 })
-for(const t in myTitles){
+for (const t in myTitles) {
     myTitles[t].texture = textureLoader.load(myTitles[t].img);
     myTitles[t].scene = scene;
 }
@@ -124,8 +120,8 @@ gridHelper.visible = false;
 axesHelper.visible = false;
 
 var stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
+stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom);
 
 
 /*------------------------------
@@ -138,10 +134,10 @@ function onWindowResize() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     starsMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
 
-    
+
     if (myObjs[currActiveModel]) {
-        
-        myObjs.forEach(obj =>{
+
+        myObjs.forEach(obj => {
             obj.particlesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
         })
     }
@@ -151,6 +147,8 @@ window.addEventListener('resize', onWindowResize, false);
 /*------------------------------
 MouseMove
 ------------------------------*/
+let mouse = new THREE.Vector2();
+
 function onMouseMove(e) {
     const x = e.clientX
     const y = e.clientY
@@ -159,6 +157,15 @@ function onMouseMove(e) {
         y: gsap.utils.mapRange(0, window.innerWidth, .05, -.05, x),
         x: gsap.utils.mapRange(0, window.innerHeight, .05, -.05, y)
     })
+
+
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    mouse.x = (x / window.innerWidth) * 2 - 1;
+    mouse.y = - (y / window.innerHeight) * 2 + 1;
+    myTitles[currActiveModel].plane.material.uniforms.uXDisplacement.value = mouse.x;
+    myTitles[currActiveModel].plane.material.uniforms.uYDisplacement.value = mouse.y;
+
 }
 window.addEventListener('mousemove', onMouseMove)
 
@@ -183,13 +190,17 @@ buttons[2].addEventListener('click', () => {
 let isScrolling;
 let scrollActivated = false;
 let body = document.querySelector('body');
-
+let hasScrolled = false;
+let cta = document.getElementById('scroll__cta');
 window.addEventListener('wheel', function (event) {
     if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated) {
         nextModel()
+        removeCta()
     } else if (event.deltaY <= 1 && !animationIsRunning() && !scrollActivated) {
         previousModel()
+        removeCta()
     }
+    
     scrollActivated = true;
     // Clear our timeout throughout the scroll
     window.clearTimeout(isScrolling);
@@ -197,12 +208,24 @@ window.addEventListener('wheel', function (event) {
     isScrolling = setTimeout(function () {
         // Run the callback
         console.log('Scrolling has stopped.');
-        
+
         scrollActivated = false;
     }, 66);
 
 }, false);
 
+function removeCta(){
+    if (!hasScrolled) {
+        gsap.to(cta, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power3.in',
+            onComplete: () => {
+                cta.style.display = "none"
+            }
+        })
+    }
+}
 
 // FUNCTIONS
 function animationIsRunning() {
@@ -241,9 +264,9 @@ function previousModel() {
     }
 }
 
-function allModels(){
+function allModels() {
     allModelsActive = true;
-    myObjs.forEach(obj =>{
+    myObjs.forEach(obj => {
         obj.add()
     });
 }
@@ -256,8 +279,8 @@ const starsCount = 200;
 const positionArray = new Float32Array(starsCount * 3);
 const scaleArray = new Float32Array(starsCount)
 
-for(let i = 0; i<starsCount; i++){
-    positionArray[i * 3 + 0] = (Math.random() * 4 - 2) * 2.5 
+for (let i = 0; i < starsCount; i++) {
+    positionArray[i * 3 + 0] = (Math.random() * 4 - 2) * 2.5
     positionArray[i * 3 + 1] = (Math.random() * 4 - 2) * 2.5
     positionArray[i * 3 + 2] = (Math.random() * 4 - 2) * 2.5
     scaleArray[i] = Math.random()
@@ -273,7 +296,7 @@ const starsMaterial = new THREE.ShaderMaterial({
     uniforms:
     {
         uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        uSize: {value: 100},
+        uSize: { value: 100 },
         uTime: { value: 0 },
     },
     vertexShader: starsVertex,
@@ -288,7 +311,7 @@ const stars = new THREE.Points(starsGeometry, starsMaterial);
 Introduction
 ------------------------------*/
 
-var _introBgMat = new THREE.MeshBasicMaterial({transparent:true, map:_bgIntroMap, side:THREE.FrontSide, depthTest:false, fog:false});
+var _introBgMat = new THREE.MeshBasicMaterial({ transparent: true, map: _bgIntroMap, side: THREE.FrontSide, depthTest: false, fog: false });
 var _backgroundIntro = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), _introBgMat);
 _backgroundIntro.scale.x = 1., _backgroundIntro.scale.y = 1.;
 _backgroundIntro.position.z = 1;
@@ -316,8 +339,8 @@ const animate = function () {
 
     if (myObjs[currActiveModel].particlesMaterial && !allModelsActive) {
         myObjs[currActiveModel].particlesMaterial.uniforms.uTime.value = elapsedTime;
-    }else if(allModelsActive){
-        myObjs.forEach(obj =>{
+    } else if (allModelsActive) {
+        myObjs.forEach(obj => {
             obj.particlesMaterial.uniforms.uTime.value = elapsedTime;
         })
     }

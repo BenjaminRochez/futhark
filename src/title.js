@@ -30,7 +30,9 @@ class Title {
                 derivatives: "#extension GL_OES_standard_derivatives : enable"
             },
             uniforms: {
-                uImage: { value: 0 }
+                uImage: { value: 0 },
+                uXDisplacement: {value: 0.3},
+                uYDisplacement: {value: 0.3}
             },
             side: THREE.DoubleSide,
             vertexShader: vertex,
@@ -41,9 +43,9 @@ class Title {
         this.texture.needsUpdate = true;
         let material = this.material.clone();
         material.uniforms.uImage.value = this.texture;
-        console.log(material)
         this.plane = new THREE.Mesh(geometry, material);
-        this.plane.position.y -= 1.5;
+        console.log(this.plane)
+        this.plane.position.y -= 1.;
     }
 
     add() {
