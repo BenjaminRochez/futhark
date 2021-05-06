@@ -1,38 +1,78 @@
+@import url(http://db.onlinewebfonts.com/c/5e0837dfd600d3dfd5ccfb8ac6079dc5?family=Blender+Pro);
 body {
-    margin: 0;
-    padding: 0;
-    background: #000000;
-  }
-  
-  canvas {
-    position: fixed;
-    z-index: -1;
-    top: 0;
-    left: 0;
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  font-family: 'Blender Pro', Arial, Helvetica, sans-serif;
+}
+html {
+  font-size: 62.5%;
+}
+canvas {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#controllers {
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  width: auto;
+  display: inline-block;
+}
+
+.button {
+  border: none;
+  background: white;
+  color: black;
+  padding: 8px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  outline: none;
+  margin: 5px;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.ui{
+  z-index: 200;
+    position: absolute;
     width: 100%;
-    height: 100%;
-  }
-  #controllers{
-    position: fixed;
-    z-index: 1;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-    text-align: center;
-    width: 100%;
-    padding: 10px;
-    width: auto;
-    display: inline-block;
-  }
-  
-  .button{
-    border: none;
-    background: white;
-    color: black;
-    padding: 8px 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    outline: none;
-    margin: 5px;
-    font-family: sans-serif;
-  }
+}
+
+.title {
+  font-size: 3rem;
+  color: #fff;
+  position: absolute;
+  left: 5.3rem;
+  top: 6rem;
+  line-height: 3.2rem;
+  cursor: pointer;
+  opacity: .7;
+  transition: opacity .2s ease-out;
+  will-change: opacity;
+}
+
+.title__job {
+  font-size: 1.3rem;
+}
+
+.menu__trigger{
+  color: #fff;
+  cursor: pointer;
+  font-size: 2rem;
+  text-align: right;
+  position: absolute;
+  opacity: .5;
+  right: 5.3rem;
+  top: 6rem;
+  pointer-events: auto;
+}

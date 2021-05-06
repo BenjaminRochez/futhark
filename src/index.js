@@ -8,7 +8,9 @@ import modelsData from './modelsData.js';
 import Stats from 'stats.js';
 import * as dat from 'dat.gui'
 
-
+var loader = new THREE.TextureLoader();
+var backgroundTexture = loader.load( './img/bg3d_sub.jpg' );
+var _bgIntroMap = loader.load("./img/bg3d_intro.png");
 /*------------------------------
 Renderer
 ------------------------------*/
@@ -26,6 +28,7 @@ document.body.appendChild(renderer.domElement);
 Scene & camera
 ------------------------------*/
 const scene = new THREE.Scene();
+scene.background = backgroundTexture;
 const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -33,7 +36,9 @@ const camera = new THREE.PerspectiveCamera(
     100
 );
 camera.position.z = 5;
-camera.position.y = 1;
+camera.position.y = 0;
+
+
 
 /*------------------------------
 Models
@@ -63,6 +68,8 @@ const gridHelper = new THREE.GridHelper(10, 10);
 scene.add(gridHelper);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
+gridHelper.visible = false;
+axesHelper.visible = false;
 
 var stats = new Stats();
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -87,10 +94,10 @@ MouseMove
 function onMouseMove(e) {
     const x = e.clientX
     const y = e.clientY
-
-    gsap.to(scene.rotation, {
-        y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
-        x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+    camera.updateProjectionMatrix();
+    gsap.to(camera.rotation, {
+        y: gsap.utils.mapRange(0, window.innerWidth, .05, -.05, x),
+        x: gsap.utils.mapRange(0, window.innerHeight, .05, -.05, y)
     })
 }
 window.addEventListener('mousemove', onMouseMove)
@@ -204,6 +211,17 @@ const starsMaterial = new THREE.ShaderMaterial({
 const stars = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(stars)
 
+
+/*------------------------------
+Introduction
+------------------------------*/
+
+var _introBgMat = new THREE.MeshBasicMaterial({transparent:true, map:_bgIntroMap, side:THREE.FrontSide, depthTest:false, fog:false});
+var _backgroundIntro = new THREE.Mesh(new THREE.PlaneGeometry(10, 5), _introBgMat);
+_backgroundIntro.scale.x = 1., _backgroundIntro.scale.y = 1.;
+_backgroundIntro.position.z = 1;
+scene.add(_backgroundIntro);
+
 /*------------------------------
 Clock
 ------------------------------*/
@@ -240,3 +258,17 @@ gui.add(gridHelper, 'visible').name('Grid Helper');
 gui.add(axesHelper, 'visible').name('Axes Helper');
 gui.add(controls, 'enabled').name('Orbit control');
 gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('starsSize')
+
+THREE.DefaultLoadingManager.onLoad = function ( ) {
+    console.log(_backgroundIntro.scale.x);
+	
+    gsap.fromTo(_backgroundIntro.scale, {
+        y: 1,
+        x: 1
+    }, {
+        y: 3,
+        x: 3,
+        duration: 3,
+        ease: 'power3.out'
+    })
+};
