@@ -14,6 +14,9 @@ uniform float uTime;
 uniform float uScale;
 
 uniform float uPixelRatio;
+// uniform float uPosX;
+// uniform float uPosY;
+uniform float uTranslationX;
 
 void main() {
     vPosition = position;
@@ -28,13 +31,17 @@ void main() {
     pos.y *= uScale + (sin(pos.z * 4.0 + time) * (1.0 - uScale) * scaling);
     pos.z *= uScale + (cos(pos.x * 4.0 + time) * (1.0 - uScale) * scaling);
 
-    pos *= uScale;
-
+    
+    //pos.x += uTranslationX;
+    
     // move random for each point
     pos.x += sin(time * aRandom.x) * 0.01;
     pos.y += cos(time * aRandom.y) * 0.01;
-    pos.z += cos(time * aRandom.z) * 0.01;
+    pos.z += cos(time * aRandom.z) * 0.01 ;
 
+    // move as circle
+    // pos.x += uPosX;
+    // pos.y += uPosY;
 
     vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
     gl_Position = projectionMatrix * mvPosition;

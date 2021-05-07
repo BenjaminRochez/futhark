@@ -235,8 +235,15 @@ window.addEventListener('click', () => {
     if (currentIntersect) {
         console.log(currentIntersect.object.name);
         // to the router here 
+        
+        myObjs[currActiveModel].move(); 
     }
 });
+
+
+
+
+
 
 // MOBILE
 

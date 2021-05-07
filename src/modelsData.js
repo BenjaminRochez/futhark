@@ -47,5 +47,7 @@ export default [
         background: '#000',
         file: './models/kenaz.glb',
         img: './img/titles/kaunan.png'
-    }
+    },
+    
+    
 ];

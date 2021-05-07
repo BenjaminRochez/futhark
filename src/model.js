@@ -19,6 +19,8 @@ class Model {
         this.background = obj.background
         this.duration = 1
         this.isActive = false
+        this.isOpen = false;
+        
 
         this.loader = new GLTFLoader()
         this.dracoLoader = new DRACOLoader()
@@ -42,7 +44,12 @@ class Model {
             ------------------------------*/
             this.geometry = this.mesh.geometry
 
-            /*------------------------------
+            // WIP CIRClE
+            // let angle = Math.random() * Math.PI * 2;
+            // const x = Math.sin(angle) * 1.7;
+            // const y = Math.cos(angle) * 1.7;
+
+            /*-----------------------------
             Particles material
             ------------------------------*/
             this.particlesMaterial = new THREE.ShaderMaterial({
@@ -52,6 +59,9 @@ class Model {
                     uTime: { value: 0 },
                     uScale: { value: 0 },
                     uPixelRatio: { value: Math.min(window.devicePixelRatio, 2)},
+                    // uPosX: {value: x},
+                    // uPosY: {value: y}
+                    uTranslationX: {value: 0}
                 },
                 vertexShader: vertex,
                 fragmentShader: fragment,
@@ -64,7 +74,7 @@ class Model {
             Particles geometry 
             - Basically, we create particles along the vertices
             ------------------------------*/
-            const numParticles = 15000
+            const numParticles = 10000
 
             const sampler = new MeshSurfaceSampler(this.mesh).build()
             
@@ -155,6 +165,22 @@ class Model {
             duration: this.duration,
             ease: 'power3.out'
         })
+    }
+
+    move(){
+        this.isOpen = true;
+        gsap.to(this.particlesMaterial.uniforms.uTranslationX, {
+            value: -2,
+            duration: this.duration,
+            ease: 'power3.out',
+        })
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 1,
+            duration: this.duration,
+            delay: .3,
+            ease: 'power3.out'
+        })
+
     }
 }
 
