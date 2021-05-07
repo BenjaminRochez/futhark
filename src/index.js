@@ -8,7 +8,7 @@ import starsFragment from './shaders/stars/fragmentShader.glsl';
 import modelsData from './modelsData.js';
 import Stats from 'stats.js';
 import * as dat from 'dat.gui'
-
+import Hammer from 'hammerjs';
 
 /*------------------------------
 Loading Manager
@@ -36,6 +36,7 @@ loadingManager.onLoad = () => {
         myTitles[title] = new Title(myTitles[title]);
     }
     loaded = true;
+    window.addEventListener('mousemove', onMouseMove);
     animate();
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
@@ -169,7 +170,7 @@ function onMouseMove(e) {
     myTitles[currActiveModel].plane.material.uniforms.uYDisplacement.value = mouse.y;
 
 }
-window.addEventListener('mousemove', onMouseMove)
+
 
 /*------------------------------
 Controller
@@ -194,6 +195,7 @@ let scrollActivated = false;
 let body = document.querySelector('body');
 let hasScrolled = false;
 let cta = document.getElementById('scroll__cta');
+
 window.addEventListener('wheel', function (event) {
     if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated) {
         nextModel()
@@ -229,11 +231,37 @@ function removeCta() {
     }
 }
 
-window.addEventListener('click', () =>{
-    if(currentIntersect){
+window.addEventListener('click', () => {
+    if (currentIntersect) {
         console.log(currentIntersect.object.name);
         // to the router here 
     }
+});
+
+// MOBILE
+
+var hammertime = new Hammer(window);
+hammertime.get('pan').set({ direction: Hammer.DIRECTION_VERTICAL });
+hammertime.on('pan', function (ev) {
+    console.log(ev);
+    if (ev.direction === 16 && !animationIsRunning() && !scrollActivated) {
+        previousModel()
+        removeCta()
+    } else if (ev.direction === 8 && !animationIsRunning() && !scrollActivated) {
+        nextModel()
+
+        removeCta()
+    }
+    scrollActivated = true;
+    // Clear our timeout throughout the scroll
+    window.clearTimeout(isScrolling);
+    // Set a timeout to run after scrolling ends
+    isScrolling = setTimeout(function () {
+        // Run the callback
+        console.log('Scrolling has stopped.');
+
+        scrollActivated = false;
+    }, 66);
 });
 
 // FUNCTIONS
@@ -346,7 +374,7 @@ const animate = function () {
     raycaster.setFromCamera(mouse, camera)
 
     if (myObjs[currActiveModel].particles) {
-        
+
         const objectsToTest = [myObjs[currActiveModel].mesh, myTitles[currActiveModel].plane];
         const intersects = raycaster.intersectObjects(objectsToTest)
         if (intersects.length) {
