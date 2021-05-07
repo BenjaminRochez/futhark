@@ -168,3 +168,36 @@ canvas {
       color: #fff
   }
 }
+
+
+
+/* Content */
+
+#content{
+  position: fixed;
+  width: 40%;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1.5rem;
+  font-family: 'Raleway';
+  letter-spacing: 1.5px;
+}
+
+#content p{
+  margin: 20px 0;
+}
+
+#content h2{
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+#content ul{
+
+}
+
+#content ul li{
+
+}

@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import Model from './model.js';
 import Title from './title.js';
+import Juventus from './juventus.js';
 import starsVertex from './shaders/stars/vertexShader.glsl';
 import starsFragment from './shaders/stars/fragmentShader.glsl';
 import modelsData from './modelsData.js';
@@ -38,6 +39,7 @@ loadingManager.onLoad = () => {
     loaded = true;
     window.addEventListener('mousemove', onMouseMove);
     animate();
+
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
     console.log('loading progressing ', (itemsLoaded / itemsTotal * 100) + '%');
@@ -176,17 +178,17 @@ function onMouseMove(e) {
 Controller
 ------------------------------*/
 // BUTTONS
-const buttons = document.querySelectorAll('.button')
-buttons[0].addEventListener('click', () => {
-    nextModel()
-})
-buttons[1].addEventListener('click', () => {
-    previousModel()
-})
+// const buttons = document.querySelectorAll('.button')
+// buttons[0].addEventListener('click', () => {
+//     nextModel()
+// })
+// buttons[1].addEventListener('click', () => {
+//     previousModel()
+// })
 
-buttons[2].addEventListener('click', () => {
-    allModels()
-})
+// buttons[2].addEventListener('click', () => {
+//     allModels()
+// })
 
 
 // SCROLL
@@ -235,12 +237,12 @@ window.addEventListener('click', () => {
     if (currentIntersect) {
         console.log(currentIntersect.object.name);
         // to the router here 
-        if(!myObjs[currActiveModel].isOpen){
-            myObjs[currActiveModel].move(); 
-        }else{
-            myObjs[currActiveModel].reset(); 
+        if (!myObjs[currActiveModel].isOpen) {
+            myObjs[currActiveModel].move();
+        } else {
+            myObjs[currActiveModel].reset();
         }
-        
+        // loadDoc();
     }
 });
 
@@ -425,3 +427,12 @@ gui.add(controls, 'enabled').name('Orbit control');
 gui.close();
 gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('starsSize')
 
+/*------------------------------
+AJAX
+------------------------------*/
+
+// function loadDoc() {
+//     fetch("fehu.json")
+//     .then(res => res.json())
+//     .then(data => console.log(data))
+// }
