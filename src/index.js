@@ -242,7 +242,7 @@ window.addEventListener('click', () => {
         } else {
             myObjs[currActiveModel].reset();
         }
-        // loadDoc();
+        loadDoc();
     }
 });
 
@@ -431,8 +431,8 @@ gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('sta
 AJAX
 ------------------------------*/
 
-// function loadDoc() {
-//     fetch("fehu.json")
-//     .then(res => res.json())
-//     .then(data => console.log(data))
-// }
+function loadDoc() {
+    fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/fehu.json")
+    .then(res => res.json())
+    .then(data => console.log(data))
+}
