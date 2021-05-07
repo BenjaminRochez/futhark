@@ -235,8 +235,12 @@ window.addEventListener('click', () => {
     if (currentIntersect) {
         console.log(currentIntersect.object.name);
         // to the router here 
+        if(!myObjs[currActiveModel].isOpen){
+            myObjs[currActiveModel].move(); 
+        }else{
+            myObjs[currActiveModel].reset(); 
+        }
         
-        myObjs[currActiveModel].move(); 
     }
 });
 

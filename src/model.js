@@ -74,7 +74,7 @@ class Model {
             Particles geometry 
             - Basically, we create particles along the vertices
             ------------------------------*/
-            const numParticles = 10000
+            const numParticles = 15000
 
             const sampler = new MeshSurfaceSampler(this.mesh).build()
             
@@ -172,15 +172,43 @@ class Model {
         gsap.to(this.particlesMaterial.uniforms.uTranslationX, {
             value: -2,
             duration: this.duration,
+            delay: .3,
             ease: 'power3.out',
         })
         gsap.to(this.particlesMaterial.uniforms.uScale, {
-            value: 1,
-            duration: this.duration,
-            delay: .3,
+            value: 0.7,
+            duration: this.duration / 2,
             ease: 'power3.out'
         })
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 1,
+            duration: this.duration / 2,
+            delay: this.duration / 2,
+            ease: 'power3.out'
+        })
+    }
 
+    reset(){
+        gsap.to(this.particlesMaterial.uniforms.uTranslationX, {
+            value: 0,
+            duration: this.duration,
+            delay: .3,
+            ease: 'power3.out',
+            onComplete: () => {
+                this.isOpen = false
+            }
+        })
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 0.7,
+            duration: this.duration / 2,
+            ease: 'power3.out'
+        })
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 1,
+            duration: this.duration / 2,
+            delay: this.duration / 2,
+            ease: 'power3.out'
+        })
     }
 }
 
