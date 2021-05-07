@@ -13,6 +13,7 @@ class Title {
         this.isActive = false
         this.placeOnLoad = object.placeOnLoad
         this.plane = null;
+        this.duration = 1;
 
         this.init();
         if (this.placeOnLoad) {
@@ -30,7 +31,9 @@ class Title {
             uniforms: {
                 uImage: { value: 0 },
                 uXDisplacement: {value: 0.3},
-                uYDisplacement: {value: 0.3}
+                uYDisplacement: {value: 0.3},
+                uScale: {value: 0.5},
+                uOpacity: {value: 0}
             },
             side: THREE.DoubleSide,
             vertexShader: vertex,
@@ -48,11 +51,35 @@ class Title {
 
     add() {
         this.scene.add(this.plane);
+        gsap.to(this.plane.material.uniforms.uOpacity, {
+            value: 1,
+            duration: this.duration,
+            delay: .3,
+            ease: 'power3.out'
+        })
+        gsap.to(this.plane.material.uniforms.uScale, {
+            value: 1,
+            duration: this.duration,
+            delay: .3,
+            ease: 'power3.out'
+        })
     }
 
     remove() {
-        this.scene.remove(this.plane)
-        this.isActive = false
+        gsap.to(this.plane.material.uniforms.uOpacity, {
+            value: 0,
+            duration: this.duration,
+            ease: 'power3.out',
+            onComplete: () => {
+                this.scene.remove(this.plane)
+                this.isActive = false
+            }
+        })
+        gsap.to(this.plane.material.uniforms.uScale, {
+            value: 0.5, 
+            duration: this.duration,
+            ease: 'power3.out'
+        })
     }
 }
 
