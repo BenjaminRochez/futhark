@@ -7,7 +7,9 @@
     "start": "parcel serve src/index.html --port 8080 --open",
     "build": "rm -rf ./dist; parcel build src/index.html --public-url '.' --no-source-maps"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "sass": "^1.32.12"
+  },
   "dependencies": {
     "cssnano": "^4.1.10",
     "dat.gui": "^0.7.7",
@@ -17,6 +19,7 @@
     "hammerjs": "^2.0.8",
     "parcel-bundler": "1.12.3",
     "parcel-plugin-static-files-copy": "^2.5.1",
+    "splitting": "^1.0.6",
     "stats": "^1.0.0",
     "stats.js": "^0.17.0",
     "three": "^0.125.2"

@@ -10,6 +10,9 @@ import modelsData from './modelsData.js';
 import Stats from 'stats.js';
 import * as dat from 'dat.gui'
 import Hammer from 'hammerjs';
+import Splitting from 'splitting';
+import "splitting/dist/splitting.css";
+
 
 /*------------------------------
 Loading Manager
@@ -242,7 +245,7 @@ window.addEventListener('click', () => {
         } else {
             myObjs[currActiveModel].reset();
         }
-        loadDoc();
+        //loadDoc();
     }
 });
 
@@ -431,8 +434,64 @@ gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('sta
 AJAX
 ------------------------------*/
 
-function loadDoc() {
-    fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/fehu.json")
-    .then(res => res.json())
-    .then(data => console.log(data))
-}
+// function loadDoc() {
+//     let DOM = document.getElementById("content");
+//     fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/json/fehu.json")
+//         .then(res => res.json())
+//         .then((data) => {
+
+//             var title = document.createElement("h2");
+//             var titleContent = document.createTextNode(data.content.title);
+//             title.appendChild(titleContent);
+//             DOM.appendChild(title);
+
+//             var list = document.createElement("ul");
+
+//             data.content.list.forEach(el => {
+//                 var elDOM = document.createElement("li");
+//                 var elContent = document.createTextNode(el);
+//                 elDOM.appendChild(elContent);
+//                 list.appendChild(elDOM);
+//             })
+//             DOM.appendChild(list);
+
+//             data.content.paragraphs.forEach(el => {
+//                 var elDOM = document.createElement("p");
+//                 var elContent = document.createTextNode(el);
+//                 elDOM.appendChild(elContent);
+                
+//                 DOM.appendChild(elDOM); 
+//             })
+
+//             DOM.setAttribute("data-splitting", 'lines');
+//             Splitting();
+//         })
+// }
+
+// create an AudioListener and add it to the camera
+const listener = new THREE.AudioListener();
+camera.add( listener );
+
+// create a global audio source
+const sound = new THREE.Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.autoplay = true;
+audioLoader.load( './sounds/inwardness.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
+
+let soundIcon = document.getElementById('sound');
+soundIcon.addEventListener('click', function(){
+    if(soundIcon.classList.contains('disabled')){
+        sound.play();
+        soundIcon.classList.remove('disabled')
+    }else{
+        sound.stop();
+        soundIcon.classList.add('disabled')
+    }
+})

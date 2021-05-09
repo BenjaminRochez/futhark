@@ -29,3 +29,6 @@ https://codesandbox.io/s/falling-dawn-cj0bb?file=/src/index.js
 
 ### Todo & ideas
 [ ] Add a scroll feedback to the user (maybe stars going up or down ?)
+[ ] Add a landing page with all the runes ?
+[x] Add music ? 
+[ ] Load & destroys models perf 
