@@ -242,10 +242,12 @@ window.addEventListener('click', () => {
         // to the router here 
         if (!myObjs[currActiveModel].isOpen) {
             myObjs[currActiveModel].move();
+            loadDoc();
         } else {
             myObjs[currActiveModel].reset();
+            removeText();
         }
-        //loadDoc();
+        
     }
 });
 
@@ -433,40 +435,47 @@ gui.add(starsMaterial.uniforms.uSize, 'value').min(0).max(500).step(1).name('sta
 /*------------------------------
 AJAX
 ------------------------------*/
+let DOM = document.getElementById("content");
+var poem = document.querySelectorAll("[data-section='poem']");
+function loadDoc() {
+    poem[0].classList.add('isActive');
+    // fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/json/fehu.json")
+    //     .then(res => res.json())
+    //     .then((data) => {
 
-// function loadDoc() {
-//     let DOM = document.getElementById("content");
-//     fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/json/fehu.json")
-//         .then(res => res.json())
-//         .then((data) => {
+    //         var title = document.createElement("h2");
+    //         var titleContent = document.createTextNode(data.content.title);
+    //         title.appendChild(titleContent);
+    //         DOM.appendChild(title);
 
-//             var title = document.createElement("h2");
-//             var titleContent = document.createTextNode(data.content.title);
-//             title.appendChild(titleContent);
-//             DOM.appendChild(title);
+    //         var list = document.createElement("ul");
 
-//             var list = document.createElement("ul");
+    //         data.content.list.forEach(el => {
+    //             var elDOM = document.createElement("li");
+    //             var elContent = document.createTextNode(el);
+    //             elDOM.appendChild(elContent);
+    //             list.appendChild(elDOM);
+    //         })
+    //         DOM.appendChild(list);
 
-//             data.content.list.forEach(el => {
-//                 var elDOM = document.createElement("li");
-//                 var elContent = document.createTextNode(el);
-//                 elDOM.appendChild(elContent);
-//                 list.appendChild(elDOM);
-//             })
-//             DOM.appendChild(list);
-
-//             data.content.paragraphs.forEach(el => {
-//                 var elDOM = document.createElement("p");
-//                 var elContent = document.createTextNode(el);
-//                 elDOM.appendChild(elContent);
+    //         data.content.paragraphs.forEach(el => {
+    //             var elDOM = document.createElement("p");
+    //             var elContent = document.createTextNode(el);
+    //             elDOM.appendChild(elContent);
                 
-//                 DOM.appendChild(elDOM); 
-//             })
+    //             DOM.appendChild(elDOM); 
+    //         })
 
-//             DOM.setAttribute("data-splitting", 'lines');
-//             Splitting();
-//         })
-// }
+    //         DOM.setAttribute("data-splitting", 'lines');
+    //         Splitting();
+    //     })
+}
+
+function removeText(){
+    // DOM.innerHTML = '';
+    poem[0].classList.remove('isActive');
+}
+
 
 // create an AudioListener and add it to the camera
 const listener = new THREE.AudioListener();
@@ -476,13 +485,13 @@ camera.add( listener );
 const sound = new THREE.Audio( listener );
 
 // load a sound and set it as the Audio object's buffer
-const audioLoader = new THREE.AudioLoader();
-audioLoader.autoplay = true;
+const audioLoader = new THREE.AudioLoader(loadingManager);
+audioLoader.autoplay = false;
 audioLoader.load( './sounds/inwardness.mp3', function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setLoop( true );
 	sound.setVolume( 0.5 );
-	sound.play();
+	//sound.play();
 });
 
 let soundIcon = document.getElementById('sound');
@@ -495,3 +504,5 @@ soundIcon.addEventListener('click', function(){
         soundIcon.classList.add('disabled')
     }
 })
+
+

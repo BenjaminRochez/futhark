@@ -176,7 +176,7 @@ canvas {
 #content{
   position: fixed;
   width: 40%;
-  left: 50%;
+  left: 10%;
   top: 50%;
   transform: translateY(-50%);
   color: #fff;
@@ -194,39 +194,54 @@ canvas {
   font-weight: bold;
   margin-bottom: 40px;
 }
-#content ul{
+// #content ul{
 
-}
+// }
 
-#content ul li{
+// #content ul li{
 
-}
+// }
 
-#content li, #content p, #content h2{
+// #content li, #content p, #content h2{
   
-  --line-percent: calc(
-    var(--line-index) / var(--line-total)
-  );
+//   --line-percent: calc(
+//     var(--line-index) / var(--line-total)
+//   );
   
-  color: hsl(
-      calc(320 * var(--line-percent)
-    ), 
-    90%, 
-    65%
-  );
+//   color: hsl(
+//       calc(320 * var(--line-percent)
+//     ), 
+//     90%, 
+//     65%
+//   );
   
-  animation: slide-in 1.2s cubic-bezier(.4,.0,.2,1) both;
-  animation-delay: calc(.2s * var(--line-index));
-}
+//   animation: slide-in 1.2s cubic-bezier(.4,.0,.2,1) both;
+//   animation-delay: calc(.2s * var(--line-index));
+// }
 
-@keyframes slide-in {
-  from {
-    transform: scale(.8) translateY(1em);
-    opacity: 0;
+// @keyframes slide-in {
+//   from {
+//     transform: scale(.8) translateY(1em);
+//     opacity: 0;
+//   }
+// }
+
+.poem{
+  p{
+    overflow: hidden;
+    vertical-align: top;
+  }
+  span{
+    display: inline-block;
+    transform-origin: 0% 0%; transform: translate(0px, 100%) skew(0deg, 15deg);
+    transition: all 1s cubic-bezier(.4,.0,.2,1);
+    transition-delay: calc(.2s * var(--line-index));
+  }
+
+  &.isActive span{
+    transform-origin: 0% 0%; transform: translate(0px, 0%) skew(0deg, 0deg);
   }
 }
-
-
 
 .sound-icon {
   display: flex;
@@ -292,4 +307,11 @@ canvas {
     animation-iteration-count: 1;
     animation-fill-mode: backwards;
   }
+}
+
+
+
+.poem{
+  font-size: 12rem;
+  //text-align: right;
 }

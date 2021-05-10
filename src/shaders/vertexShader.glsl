@@ -32,7 +32,7 @@ void main() {
     pos.z *= uScale + (cos(pos.x * 4.0 + time) * (1.0 - uScale) * scaling);
 
     
-    pos.x += uTranslationX;
+    pos.x -= uTranslationX;
     
     // move random for each point
     pos.x += sin(time * aRandom.x) * 0.01;
