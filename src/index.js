@@ -200,14 +200,17 @@ let scrollActivated = false;
 let body = document.querySelector('body');
 let hasScrolled = false;
 let cta = document.getElementById('scroll__cta');
-
+let currentSection = 0;
 window.addEventListener('wheel', function (event) {
-    if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated) {
+    if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated && !myObjs[currActiveModel].isOpen) {
         nextModel()
         removeCta()
-    } else if (event.deltaY <= 1 && !animationIsRunning() && !scrollActivated) {
+    } else if (event.deltaY <= 1 && !animationIsRunning() && !scrollActivated && !myObjs[currActiveModel].isOpen) {
         previousModel()
         removeCta()
+    } else if(event.deltaY >= 1 && !animationIsRunning() && !scrollActivated && myObjs[currActiveModel].isOpen) {
+        currentSection += 1;
+        switchSection(currentSection, 'down');
     }
 
     scrollActivated = true;
@@ -236,24 +239,6 @@ function removeCta() {
     }
 }
 
-window.addEventListener('click', () => {
-    if (currentIntersect) {
-        console.log(currentIntersect.object.name);
-        // to the router here 
-        if (!myObjs[currActiveModel].isOpen) {
-            myObjs[currActiveModel].move();
-            loadDoc();
-        } else {
-            myObjs[currActiveModel].reset();
-            removeText();
-        }
-        
-    }
-});
-
-
-
-
 
 
 // MOBILE
@@ -267,7 +252,6 @@ hammertime.on('pan', function (ev) {
         removeCta()
     } else if (ev.direction === 8 && !animationIsRunning() && !scrollActivated) {
         nextModel()
-
         removeCta()
     }
     scrollActivated = true;
@@ -319,12 +303,43 @@ function previousModel() {
     }
 }
 
+
+function switchSection(section, direction){
+    if(section === 1 && direction === 'down'){
+        console.log("switching to 1");
+        showDesc();
+    }
+}
+
+
+function resetSection(){
+    currentSection = 0;
+}
+
+window.addEventListener('click', () => {
+    if (currentIntersect) {
+        console.log(currentIntersect.object.name);
+        // to the router here 
+        if (!myObjs[currActiveModel].isOpen) {
+            myObjs[currActiveModel].move();
+            loadDoc();
+        } else {
+            myObjs[currActiveModel].reset();
+            removeText();
+            resetSection();
+        }
+        
+    }
+});
+
 function allModels() {
     allModelsActive = true;
     myObjs.forEach(obj => {
         obj.add()
     });
 }
+
+
 
 /*------------------------------
 Stars
@@ -439,6 +454,7 @@ let DOM = document.getElementById("content");
 var poem = document.querySelectorAll("[data-section='poem']");
 function loadDoc() {
     poem[0].classList.add('isActive');
+    
     // fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/json/fehu.json")
     //     .then(res => res.json())
     //     .then((data) => {
@@ -476,6 +492,33 @@ function removeText(){
     poem[0].classList.remove('isActive');
 }
 
+// Anim desc
+function showDesc(){
+    
+
+
+    myObjs[currActiveModel].moveLeft();
+    gsap.to(poem[0],{
+        top: '-50%',
+        duration: .7,
+        ease: 'power3.in',
+    }); 
+
+    gsap.to('.desc', {
+        top: "50%",
+        duration: 0.1,
+        ease: 'power3.in',
+        onComplete: () =>{
+            Splitting({
+                by: "lines"
+            });
+        }
+    })
+}
+
+/*------------------------------
+SOUND
+------------------------------*/
 
 // create an AudioListener and add it to the camera
 const listener = new THREE.AudioListener();

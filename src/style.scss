@@ -1,56 +1,137 @@
-@import url(http://db.onlinewebfonts.com/c/5e0837dfd600d3dfd5ccfb8ac6079dc5?family=Blender+Pro);
+//transform-origin: 0% 0%; transform: translate(0px, 100%) skew(0deg, 15deg);
+//transform: translate(0px, 120%) skew(0deg, 5deg);
 
+@import url(http://db.onlinewebfonts.com/c/5e0837dfd600d3dfd5ccfb8ac6079dc5?family=Blender+Pro);
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-	quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
-
-
 
 body {
   margin: 0;
@@ -137,116 +218,121 @@ canvas {
   opacity: 1;
 }
 
-#scroll__cta{
+#scroll__cta {
   position: absolute;
-    left: 50%;
-    bottom: 5vh;
-    transform: translate(-50%);
-    color: #fff;
-    font-size: 4.5rem;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-size: 2.5rem;
-    animation: highlight 3s infinite;
-    opacity: 1;
-    display: block;
-    text-align: center;
-    z-index: 99;
+  left: 50%;
+  bottom: 5vh;
+  transform: translate(-50%);
+  color: #fff;
+  font-size: 4.5rem;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-size: 2.5rem;
+  animation: highlight 3s infinite;
+  opacity: 1;
+  display: block;
+  text-align: center;
+  z-index: 99;
 }
-
 
 @keyframes highlight {
   0% {
-      color: #fff
+    color: #fff;
   }
 
   50% {
-      color: hsla(0,0%,100%,0)
+    color: hsla(0, 0%, 100%, 0);
   }
 
   to {
-      color: #fff
+    color: #fff;
   }
 }
 
-
-
 /* Content */
 
-#content{
+#content {
   position: fixed;
-  width: 40%;
-  left: 10%;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 100%;
+  left: 0;
+  height: 100vh;
+  top: 0;
   color: #fff;
   font-size: 1.5rem;
-  font-family: 'Raleway';
+  font-family: "Raleway";
   letter-spacing: 1.5px;
+  pointer-events: none;
 }
 
-#content p{
+#content p {
   margin: 20px 0;
 }
 
-#content h2{
+#content h2 {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 40px;
 }
-// #content ul{
 
-// }
-
-// #content ul li{
-
-// }
-
-// #content li, #content p, #content h2{
-  
-//   --line-percent: calc(
-//     var(--line-index) / var(--line-total)
-//   );
-  
-//   color: hsl(
-//       calc(320 * var(--line-percent)
-//     ), 
-//     90%, 
-//     65%
-//   );
-  
-//   animation: slide-in 1.2s cubic-bezier(.4,.0,.2,1) both;
-//   animation-delay: calc(.2s * var(--line-index));
-// }
-
-// @keyframes slide-in {
-//   from {
-//     transform: scale(.8) translateY(1em);
-//     opacity: 0;
-//   }
-// }
-
-.poem{
-  p{
+.poem {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10%;
+  p {
     overflow: hidden;
     vertical-align: top;
   }
-  span{
+  span {
     display: inline-block;
-    transform-origin: 0% 0%; transform: translate(0px, 100%) skew(0deg, 15deg);
-    transition: all 1s cubic-bezier(.4,.0,.2,1);
-    transition-delay: calc(.2s * var(--line-index));
+    transform-origin: 0% 0%;
+    transform: translate(0px, 100%) skew(0deg, 15deg);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: calc(0.2s * var(--line-index));
   }
 
-  &.isActive span{
-    transform-origin: 0% 0%; transform: translate(0px, 0%) skew(0deg, 0deg);
+  &.isActive span {
+    transform-origin: 0% 0%;
+    transform: translate(0px, 0%) skew(0deg, 0deg);
+  }
+}
+
+.desc{
+  position: absolute;
+  top: 110%;
+  transform: translateY(-50%);
+  right: 10%;
+  width: 40%;
+  opacity: 0;
+  transition: 0.1s opacity ease-out;
+}
+
+.desc.splitting{
+  opacity: 1;
+}
+.desc p{
+  line-height: 2;
+}
+
+.desc.splitting .word {
+  transform: translateY(1.5em);
+  opacity: 0;
+  animation: slide-in .6s cubic-bezier(.5, 0, .5, 1) both;
+  animation-delay: calc(3ms * var(--word-index) + 1000ms );
+}
+
+
+@keyframes slide-in {
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
 .sound-icon {
   display: flex;
   position: fixed;
-  bottom:50px;
+  bottom: 50px;
   left: 50px;
   z-index: 999;
   align-items: center;
@@ -257,8 +343,8 @@ canvas {
   height: 23px;
   display: flex;
   justify-content: space-around;
-  align-items: center; 
-  
+  align-items: center;
+
   .bar {
     display: block;
     width: 2px;
@@ -280,28 +366,59 @@ canvas {
 }
 
 @keyframes sound {
-    0% {
-       opacity: .35;
-        height: 3px; 
-    }
-    100% {
-        opacity: 1;       
-        height: 23px;        
-    }
+  0% {
+    opacity: 0.35;
+    height: 3px;
+  }
+  100% {
+    opacity: 1;
+    height: 23px;
+  }
 }
 
-.bar:nth-child(1)  { height: 1px; animation-duration: 474ms; }
-.bar:nth-child(2)  { height: 5px; animation-duration: 433ms; }
-.bar:nth-child(3)  { height: 9px; animation-duration: 407ms; }
-.bar:nth-child(4)  { height: 13px; animation-duration: 458ms; }
-.bar:nth-child(5)  { height: 15px; animation-duration: 400ms; }
-.bar:nth-child(6)  { height: 16px; animation-duration: 427ms; }
-.bar:nth-child(7)  { height: 17px; animation-duration: 441ms; }
-.bar:nth-child(8)  { height: 18px; animation-duration: 419ms; }
-.bar:nth-child(9)  { height: 20px; animation-duration: 487ms; }
-.bar:nth-child(10) { height: 23px; animation-duration: 442ms; }
+.bar:nth-child(1) {
+  height: 1px;
+  animation-duration: 474ms;
+}
+.bar:nth-child(2) {
+  height: 5px;
+  animation-duration: 433ms;
+}
+.bar:nth-child(3) {
+  height: 9px;
+  animation-duration: 407ms;
+}
+.bar:nth-child(4) {
+  height: 13px;
+  animation-duration: 458ms;
+}
+.bar:nth-child(5) {
+  height: 15px;
+  animation-duration: 400ms;
+}
+.bar:nth-child(6) {
+  height: 16px;
+  animation-duration: 427ms;
+}
+.bar:nth-child(7) {
+  height: 17px;
+  animation-duration: 441ms;
+}
+.bar:nth-child(8) {
+  height: 18px;
+  animation-duration: 419ms;
+}
+.bar:nth-child(9) {
+  height: 20px;
+  animation-duration: 487ms;
+}
+.bar:nth-child(10) {
+  height: 23px;
+  animation-duration: 442ms;
+}
 
-.sound-icon:hover, .sound-icon.disabled{
+.sound-icon:hover,
+.sound-icon.disabled {
   .bar {
     height: 2px;
     animation-iteration-count: 1;
@@ -309,9 +426,7 @@ canvas {
   }
 }
 
-
-
-.poem{
+.poem {
   font-size: 12rem;
   //text-align: right;
 }

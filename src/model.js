@@ -188,6 +188,15 @@ class Model {
         })
     }
 
+    moveLeft(){
+        gsap.to(this.particlesMaterial.uniforms.uTranslationX, {
+            value: 2,
+            duration: this.duration,
+            delay: .4,
+            ease: 'power3.out',
+        })
+    }
+
     reset(){
         gsap.to(this.particlesMaterial.uniforms.uTranslationX, {
             value: 0,
