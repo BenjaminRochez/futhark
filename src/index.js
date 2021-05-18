@@ -42,7 +42,6 @@ loadingManager.onLoad = () => {
     loaded = true;
     window.addEventListener('mousemove', onMouseMove);
     animate();
-
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
     console.log('loading progressing ', (itemsLoaded / itemsTotal * 100) + '%');
@@ -529,13 +528,14 @@ const sound = new THREE.Audio( listener );
 
 // load a sound and set it as the Audio object's buffer
 const audioLoader = new THREE.AudioLoader(loadingManager);
-audioLoader.autoplay = false;
+
 audioLoader.load( './sounds/inwardness.mp3', function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setLoop( true );
 	sound.setVolume( 0.5 );
-	//sound.play();
+	sound.play();
 });
+audioLoader.autoplay = true; 
 
 let soundIcon = document.getElementById('sound');
 soundIcon.addEventListener('click', function(){
