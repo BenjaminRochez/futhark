@@ -66,8 +66,9 @@ class Model {
                 vertexShader: vertex,
                 fragmentShader: fragment,
                 transparent: true,
-                depthTest: false,
-                depthWrite: false,
+                alphaTest: 0.001,
+                //depthTest: false,
+                //depthWrite: false,
                 blending: THREE.AdditiveBlending
             })
             /*------------------------------

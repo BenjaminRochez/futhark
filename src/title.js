@@ -7,14 +7,16 @@ class Title {
     constructor(object) {
         //console.log(object);
         this.name = object.name;
-        this.res = 221 / 46 * .3;
+        this.res = 1000 / 200 * .3;
         this.scene = object.scene
         this.texture = object.texture
         this.isActive = false
         this.placeOnLoad = object.placeOnLoad
         this.plane = null;
         this.duration = 1;
-
+        this.texture.anisotropy = 0;
+        this.texture.magFilter = THREE.NearestFilter;
+        this.texture.minFilter = THREE.NearestFilter;
         this.init();
         if (this.placeOnLoad) {
             this.add()
@@ -35,10 +37,13 @@ class Title {
                 uScale: {value: 0.5},
                 uOpacity: {value: 0}
             },
-            side: THREE.DoubleSide,
+            side: THREE.FrontSide,
             vertexShader: vertex,
             fragmentShader: fragment,
-            transparent: true
+            transparent: true,
+            //alphaTest: 0.001,
+            //depthTest: false,
+            depthWrite: false,
         });
 
         this.texture.needsUpdate = true;
@@ -47,6 +52,8 @@ class Title {
         this.plane = new THREE.Mesh(geometry, material);
         this.plane.name = this.name;
         this.plane.position.y -= 1.;
+        this.plane.position.x = 0;
+        this.plane.position.z -= 4.;
     }
 
     add() {
@@ -58,7 +65,7 @@ class Title {
             ease: 'power3.out'
         })
         gsap.to(this.plane.material.uniforms.uScale, {
-            value: 1,
+            value: 6,
             duration: this.duration,
             delay: .3,
             ease: 'power3.out'

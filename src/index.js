@@ -26,6 +26,12 @@ loadingManager.onStart = () => {
 loadingManager.onLoad = () => {
     //console.log('loading finished')
     scene.add(stars)
+
+    for (const title in myTitles) {
+        myTitles[title] = new Title(myTitles[title]);
+    }
+    loaded = true;
+    window.addEventListener('mousemove', onMouseMove);
     gsap.fromTo(_backgroundIntro.scale, {
         y: 1,
         x: 1
@@ -33,14 +39,9 @@ loadingManager.onLoad = () => {
         y: 3,
         x: 3,
         duration: 3,
+        delay: 1,
         ease: 'power3.out'
     })
-
-    for (const title in myTitles) {
-        myTitles[title] = new Title(myTitles[title]);
-    }
-    loaded = true;
-    window.addEventListener('mousemove', onMouseMove);
     animate();
 }
 loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
@@ -123,8 +124,6 @@ Helpers
 // scene.add(gridHelper);
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
-// gridHelper.visible = false;
-// axesHelper.visible = false;
 
 var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -156,57 +155,47 @@ MouseMove
 ------------------------------*/
 let mouse = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
+
+
 function onMouseMove(e) {
-    const x = e.clientX
-    const y = e.clientY
-    camera.updateProjectionMatrix();
-    gsap.to(camera.rotation, {
-        y: gsap.utils.mapRange(0, window.innerWidth, .05, -.05, x),
-        x: gsap.utils.mapRange(0, window.innerHeight, .05, -.05, y)
-    })
-
-
-    // calculate mouse position in normalized device coordinates
-    // (-1 to +1) for both components
-    mouse.x = (x / window.innerWidth) * 2 - 1;
-    mouse.y = - (y / window.innerHeight) * 2 + 1;
-    myTitles[currActiveModel].plane.material.uniforms.uXDisplacement.value = mouse.x;
-    myTitles[currActiveModel].plane.material.uniforms.uYDisplacement.value = mouse.y;
-
+    
+        const x = e.clientX
+        const y = e.clientY
+        camera.updateProjectionMatrix();
+        gsap.to(scene.rotation, {
+            y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
+            x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+        })
+    
+    
+        // calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+        //mouse.x = (x / window.innerWidth) * 2 - 1;
+        //mouse.y = - (y / window.innerHeight) * 2 + 1;
+        //myTitles[currActiveModel].plane.material.uniforms.uXDisplacement.value = mouse.x;
+        //myTitles[currActiveModel].plane.material.uniforms.uYDisplacement.value = mouse.y;
+    
 }
 
 
 /*------------------------------
 Controller
 ------------------------------*/
-// BUTTONS
-// const buttons = document.querySelectorAll('.button')
-// buttons[0].addEventListener('click', () => {
-//     nextModel()
-// })
-// buttons[1].addEventListener('click', () => {
-//     previousModel()
-// })
-
-// buttons[2].addEventListener('click', () => {
-//     allModels()
-// })
-
 
 // SCROLL
 let isScrolling;
 let scrollActivated = false;
 let body = document.querySelector('body');
 let hasScrolled = false;
-let cta = document.getElementById('scroll__cta');
+//let cta = document.getElementById('scroll__cta');
 let currentSection = 0;
 window.addEventListener('wheel', function (event) {
     if (event.deltaY >= 1 && !animationIsRunning() && !scrollActivated && !myObjs[currActiveModel].isOpen) {
         nextModel()
-        removeCta()
+        //removeCta()
     } else if (event.deltaY <= 1 && !animationIsRunning() && !scrollActivated && !myObjs[currActiveModel].isOpen) {
         previousModel()
-        removeCta()
+        //removeCta()
     } else if(event.deltaY >= 1 && !animationIsRunning() && !scrollActivated && myObjs[currActiveModel].isOpen) {
         currentSection += 1;
         switchSection(currentSection, 'down');
@@ -232,7 +221,7 @@ function removeCta() {
             duration: 0.5,
             ease: 'power3.in',
             onComplete: () => {
-                cta.style.display = "none"
+                //cta.style.display = "none"
             }
         })
     }
@@ -327,7 +316,6 @@ window.addEventListener('click', () => {
             removeText();
             resetSection();
         }
-        
     }
 });
 
@@ -344,14 +332,14 @@ function allModels() {
 Stars
 ------------------------------*/
 const starsGeometry = new THREE.BufferGeometry();
-const starsCount = 200;
+const starsCount = 120;
 const positionArray = new Float32Array(starsCount * 3);
 const scaleArray = new Float32Array(starsCount)
 
 for (let i = 0; i < starsCount; i++) {
     positionArray[i * 3 + 0] = (Math.random() * 4 - 2) * 2.5
     positionArray[i * 3 + 1] = (Math.random() * 4 - 2) * 2.5
-    positionArray[i * 3 + 2] = (Math.random() * 4 - 2) * 2.5
+    positionArray[i * 3 + 2] = (Math.random() * 2 - 1) * 2.5
     scaleArray[i] = Math.random()
 }
 starsGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1))
@@ -439,6 +427,7 @@ const animate = function () {
 /*------------------------------
 GUI
 ------------------------------*/
+
 const gui = new dat.GUI()
 // gui.add(gridHelper, 'visible').name('Grid Helper');
 // gui.add(axesHelper, 'visible').name('Axes Helper');
@@ -453,37 +442,7 @@ let DOM = document.getElementById("content");
 var poem = document.querySelectorAll("[data-section='poem']");
 function loadDoc() {
     poem[0].classList.add('isActive');
-    
-    // fetch("https://raw.githubusercontent.com/BenjaminRochez/futhark/master/src/json/fehu.json")
-    //     .then(res => res.json())
-    //     .then((data) => {
 
-    //         var title = document.createElement("h2");
-    //         var titleContent = document.createTextNode(data.content.title);
-    //         title.appendChild(titleContent);
-    //         DOM.appendChild(title);
-
-    //         var list = document.createElement("ul");
-
-    //         data.content.list.forEach(el => {
-    //             var elDOM = document.createElement("li");
-    //             var elContent = document.createTextNode(el);
-    //             elDOM.appendChild(elContent);
-    //             list.appendChild(elDOM);
-    //         })
-    //         DOM.appendChild(list);
-
-    //         data.content.paragraphs.forEach(el => {
-    //             var elDOM = document.createElement("p");
-    //             var elContent = document.createTextNode(el);
-    //             elDOM.appendChild(elContent);
-                
-    //             DOM.appendChild(elDOM); 
-    //         })
-
-    //         DOM.setAttribute("data-splitting", 'lines');
-    //         Splitting();
-    //     })
 }
 
 function removeText(){
@@ -533,9 +492,9 @@ audioLoader.load( './sounds/inwardness.mp3', function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setLoop( true );
 	sound.setVolume( 0.5 );
-	sound.play();
+	//sound.play();
 });
-audioLoader.autoplay = true; 
+audioLoader.autoplay = false; 
 
 let soundIcon = document.getElementById('sound');
 soundIcon.addEventListener('click', function(){
