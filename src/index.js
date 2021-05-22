@@ -170,8 +170,8 @@ function onMouseMove(e) {
     
         // calculate mouse position in normalized device coordinates
         // (-1 to +1) for both components
-        //mouse.x = (x / window.innerWidth) * 2 - 1;
-        //mouse.y = - (y / window.innerHeight) * 2 + 1;
+        mouse.x = (x / window.innerWidth) * 2 - 1;
+        mouse.y = - (y / window.innerHeight) * 2 + 1;
         //myTitles[currActiveModel].plane.material.uniforms.uXDisplacement.value = mouse.x;
         //myTitles[currActiveModel].plane.material.uniforms.uYDisplacement.value = mouse.y;
     
